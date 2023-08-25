@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mutlimotos_movil/start_page.dart';
+import 'package:mutlimotos_movil/login.dart';
+
 
 void main() {
   runApp(const MyApp());
@@ -17,7 +19,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.red,
       ),
       debugShowCheckedModeBanner: false,
-      home: const StartPage(),
+      home: LoginPage(),
     );
   }
 }
