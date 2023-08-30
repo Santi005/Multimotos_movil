@@ -4,6 +4,9 @@
         android:label="mutlimotos_movil"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyBqaKSNGXi0v6IGv7MRnMOmjRjJFN1PfTg"/>
         <activity
             android:name=".MainActivity"
             android:exported="true"

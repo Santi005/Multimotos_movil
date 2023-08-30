@@ -1,5 +1,30 @@
 import 'package:flutter/material.dart';
-import 'package:mutlimotos_movil/envios_list.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:http/http.dart' as http;
+import 'package:mutlimotos_movil/components/body.dart';
+import 'dart:convert';
+
+import 'detalle_envio.dart';
+
+class Sale {
+  final String cliente;
+  final String noCotizacion;
+  final String empleado;
+  final String estadoEnvio;
+  final String latitud;
+  final String longitud;
+  final String direccion;
+
+  Sale({
+    required this.cliente,
+    required this.noCotizacion,
+    required this.empleado,
+    required this.estadoEnvio,
+    required this.latitud,
+    required this.longitud,
+    required this.direccion,
+  });
+}
 
 class Envios extends StatefulWidget {
   const Envios({super.key});
@@ -9,85 +34,54 @@ class Envios extends StatefulWidget {
 }
 
 class _EnviosState extends State<Envios> {
+  List<Sale> envios = [];
+
+  @override
+  void initState() {
+    super.initState();
+    fetchSales();
+  }
+
+  void fetchSales() async {
+    final response = await http.get(Uri.parse('https://fda3-2800-e2-9600-1b5-1c0f-f934-84b2-59c6.ngrok.io/sales/'));
+    if (response.statusCode == 200) {
+      final List<dynamic> jsonData = json.decode(response.body);
+
+      final List<Sale> sales = jsonData.map((data) {
+        return Sale(
+          cliente: data['Cliente'][0],
+          noCotizacion: data['Factura'],
+          empleado: data['Empleado'],
+          estadoEnvio: data['EstadoEnvio'],
+          latitud: data['Cliente'][6],
+          longitud: data['Cliente'][7],
+          direccion: data['Cliente'][2],
+        );
+      }).toList();
+
+      setState(() {
+        envios = sales;
+      });
+    } else {
+      print('Error en la solicitud a la API: ${response.statusCode}');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Envios"),
-        backgroundColor: Colors.red,
+      appBar: buildAppBar(),
+      body: Body(envios: envios),
+    );
+  }
+
+  AppBar buildAppBar() {
+    return AppBar(
+      elevation: 0,
+      leading: IconButton(
+        icon: SvgPicture.asset('icons/menu.svg'), 
+        onPressed: () {},
       ),
-      body: 
-      ListView.separated(
-        itemCount: envios.length,
-        separatorBuilder: (BuildContext context, int index) => const Divider(),
-        itemBuilder: (BuildContext context, int index) {
-          return Padding(
-            padding: const EdgeInsets.all(20),
-
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-
-              children: [
-                
-                Column(
-                  children: [
-                    Text("${envios[index]['Cliente']}" ,
-                    style: const TextStyle(
-                    color:Colors.black,
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold
-                    ) ,),
-
-                    Text("${envios[index]['No Cotización']}" ,
-                    style: const TextStyle(
-                    color:Colors.black,
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold
-                    ) ,),
-
-                    Text("${envios[index]['Empleado']}" ,
-                    style: const TextStyle(
-                    color:Colors.black,
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold
-                    ) ,),
-
-                    Text("${envios[index]['Estado del envio']}" ,
-                    style: const TextStyle(
-                    color:Colors.black,
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold
-                    ) ,),
-                  ],
-                ),
-
-                Column(
-                  children: [
-                    IconButton(
-                      onPressed: (){}, 
-                      icon: const Icon(
-                        Icons.local_shipping, 
-                        color: Colors.red,
-                        size: 24.0,
-                      )
-                    ),
-
-                    IconButton(
-                      onPressed: (){}, 
-                      icon: const Icon(
-                        Icons.location_on_sharp, 
-                        color: Colors.red,
-                        size: 24.0,
-                      )
-                    )
-                  ],
-                )
-
-              ],
-            ),
-          );
-        }
-      )
     );
   }
 }

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:mutlimotos_movil/start_page.dart'; // Importa el paquete http para hacer peticiones HTTP
 import 'package:mutlimotos_movil/envios.dart';
 import 'package:http/http.dart' as http;
 
@@ -13,7 +12,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Login App',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.red,
       ),
       home: LoginPage(),
     );
@@ -37,7 +36,7 @@ class _LoginPageState extends State<LoginPage> {
 
     // Llamada a la API para autenticación
     final response = await http.post(
-      Uri.parse('http://localhost:8080/auth/login'),
+      Uri.parse('https://fda3-2800-e2-9600-1b5-1c0f-f934-84b2-59c6.ngrok.io/auth/login'),
       body: {'correo': email, 'Contrasena': password},
     );
 
@@ -49,7 +48,7 @@ class _LoginPageState extends State<LoginPage> {
       // Navegar a la página HomePage después del inicio de sesión exitoso
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => StartPage()),
+        MaterialPageRoute(builder: (context) => Envios()),
       );
     } else {
       setState(() {
@@ -61,15 +60,29 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Login'),
-      ),
       body: Center(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+
+              Row(
+
+            mainAxisAlignment: MainAxisAlignment.center,
+
+            children: [
+
+              Image.asset('images/logoMultimotos.png',
+                width: 200,
+                height: 200,
+              ),
+
+            ],
+          ),
+
+          SizedBox(height: 50),
+
               TextFormField(
                 controller: _emailController,
                 decoration: InputDecoration(
