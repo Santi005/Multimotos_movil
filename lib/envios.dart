@@ -43,7 +43,7 @@ class _EnviosState extends State<Envios> {
   }
 
   void fetchSales() async {
-    final response = await http.get(Uri.parse('https://fda3-2800-e2-9600-1b5-1c0f-f934-84b2-59c6.ngrok.io/sales/'));
+    final response = await http.get(Uri.parse('https://e51f-2800-e2-9600-1b5-e492-e7f8-9938-5671.ngrok.io/sales/'));
     if (response.statusCode == 200) {
       final List<dynamic> jsonData = json.decode(response.body);
 

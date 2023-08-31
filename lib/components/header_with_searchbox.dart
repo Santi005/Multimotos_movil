@@ -4,9 +4,12 @@ import 'package:flutter_svg/svg.dart';
 import '../constants.dart';
 
 class HeaderWithSearchBox extends StatelessWidget {
+  final ValueChanged<String> onSearchTextChanged;
+
   const HeaderWithSearchBox({
     super.key,
     required this.size,
+    required this.onSearchTextChanged,
   });
 
   final Size size;
@@ -37,7 +40,7 @@ class HeaderWithSearchBox extends StatelessWidget {
             child: Row(
               children: <Widget>[
                 Text(
-                  'Envíos',
+                  'Envíos\n¡Hola, Santiago!',
                   style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                     color: Colors.white,
                     fontWeight: FontWeight.bold
@@ -71,7 +74,7 @@ class HeaderWithSearchBox extends StatelessWidget {
               child: Row(
                 children: <Widget>[
                   Expanded(child: TextField(
-                      onChanged: (value) {},
+                      onChanged: onSearchTextChanged,
                       decoration: InputDecoration(
                         hintText: "Buscar",
                         hintStyle: TextStyle(
@@ -82,7 +85,7 @@ class HeaderWithSearchBox extends StatelessWidget {
                       ),
                     ),
                   ),
-                  SvgPicture.asset('icons/search.svg'),
+                  const Icon(Icons.search)
                 ],
               ),
             )

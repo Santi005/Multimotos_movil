@@ -3,39 +3,76 @@ import '../detalle_envio.dart';
 import '../envios.dart';
 import 'header_with_searchbox.dart';
 
-class Body extends StatelessWidget {
+class Body extends StatefulWidget {
   final List<Sale> envios;
-  
-  Color _getColorForStatus(String status) {
-    if (status == "Por enviar") {
-      return Colors.orange;
-    } else if (status == "En camino") {
-      return Colors.green;
-    } else if (status == "Devolución") {
-      return Colors.red;
-    } else if (status == "Entregado") {
-      return Colors.blue;
-    } else {
-      return Colors.black;
-    }
-  } // Agrega esta línea
 
   const Body({required this.envios, Key? key}) : super(key: key);
 
   @override
+  State<Body> createState() => _BodyState();
+}
+
+class _BodyState extends State<Body> {
+  // List<Sale> enviosFiltered = []; // Lista para almacenar los resultados filtrados
+  late TextEditingController _searchController;
+
+  @override
+  void initState() {
+    super.initState();
+    _searchController = TextEditingController();
+    // enviosFiltered = widget.envios; // Inicialmente, mostrar todos los envíos
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  void _onSearchTextChanged(String newText) {
+  newText = newText.toLowerCase();
+  setState(() {
+    widget.envios.where((envio) {
+      final cliente = envio.cliente.toLowerCase();
+      final noCotizacion = envio.noCotizacion.toLowerCase();
+      final empleado = envio.empleado.toLowerCase();
+      return cliente.contains(newText) ||
+          noCotizacion.contains(newText) ||
+          empleado.contains(newText);
+    }).toList();
+  });
+}
+
+
+  Color _getColorForStatus(String status) {
+    if (status == "Por enviar") {
+      return Colors.red;
+    } else if (status == "En camino") {
+      return Colors.deepOrange;
+    } else if (status == "Devolución") {
+      return Colors.purple;
+    } else if (status == "Entregado") {
+      return Colors.greenAccent;
+    } else {
+      return Colors.black;
+    }
+  } 
+ @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return SingleChildScrollView(
       child: Column(
         children: <Widget>[
-          HeaderWithSearchBox(size: size),
-          ListView.separated(
-            shrinkWrap: true, // Added this line to prevent list from taking full height
-            itemCount: envios.length, // Use the length of the envios list
-            separatorBuilder: (BuildContext context, int index) =>
-              const Divider(),
+          HeaderWithSearchBox(
+            size: size,
+            onSearchTextChanged: _onSearchTextChanged,
+          ),
+          ListView.builder(
+            physics: const NeverScrollableScrollPhysics(),
+            shrinkWrap: true,
+            itemCount: widget.envios.length,
             itemBuilder: (BuildContext context, int index) {
-              final statusColor = _getColorForStatus(envios[index].estadoEnvio);
+              final statusColor = _getColorForStatus(widget.envios[index].estadoEnvio);
               return Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
                 child: Container(
@@ -56,7 +93,7 @@ class Body extends StatelessWidget {
                     children: [
                       Container(
                         width: 5,
-                        height: 60,
+                        height: 100,
                         decoration: BoxDecoration(
                           color: statusColor,
                           borderRadius: const BorderRadius.only(
@@ -66,65 +103,76 @@ class Body extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(width: 10),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "${envios[index].cliente}",
-                            style: const TextStyle(
-                              color: Colors.black,
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          const SizedBox(height: 4),
-                          Text(
-                            "No Cotización: ${envios[index].noCotizacion}",
-                            style: const TextStyle(
-                              color: Colors.grey,
-                              fontSize: 14,
-                            ),
-                          ),
-                          Text(
-                            "Empleado: ${envios[index].empleado}",
-                            style: const TextStyle(
-                              color: Colors.grey,
-                              fontSize: 14,
-                            ),
-                          ),
-                          Text(
-                            "Estado: ${envios[index].estadoEnvio}",
-                            style: TextStyle(
-                              color: statusColor,
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          Text(
-                            "Dirección: ${envios[index].direccion}",
-                            style: TextStyle(
-                              color: statusColor,
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
+                      Image.asset(
+                        'images/user.png',
+                        width: 50,
+                        height: 50,
                       ),
-                      const Spacer(),
-                      GestureDetector(
-                        onTap: () {
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "${widget.envios[index].cliente}",
+                              style: const TextStyle(
+                                color: Colors.black,
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              "No Cotización: ${widget.envios[index].noCotizacion}",
+                              style: const TextStyle(
+                                color: Colors.grey,
+                                fontSize: 14,
+                              ),
+                            ),
+                            Text(
+                              "Empleado: ${widget.envios[index].empleado}",
+                              style: const TextStyle(
+                                color: Colors.grey,
+                                fontSize: 14,
+                              ),
+                            ),
+                            Text(
+                              "Dirección: ${widget.envios[index].direccion}",
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                              style: const TextStyle(
+                                color: Colors.grey,
+                                fontSize: 14,
+                              ),
+                            ),
+                            Text(
+                              "Estado: ${widget.envios[index].estadoEnvio}",
+                              style: TextStyle(
+                                color: statusColor,
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      IconButton(
+                        onPressed: () {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
                               builder: (context) => DetalleEnvio(
-                                cliente: envios[index].cliente,
-                                estado: envios[index].estadoEnvio,
-                                direccion: envios[index].direccion,
+                                cliente: widget.envios[index].cliente,
+                                estado: widget.envios[index].estadoEnvio,
+                                latitud: widget.envios[index].latitud,
+                                longitud: widget.envios[index].longitud,
                               ),
                             ),
                           );
                         },
-                        child: const Icon(Icons.more_horiz, color: Colors.grey),
+                        icon: const Icon(Icons.remove_red_eye),
+                        color: statusColor,
                       ),
                     ],
                   ),

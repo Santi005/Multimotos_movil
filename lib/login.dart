@@ -36,7 +36,7 @@ class _LoginPageState extends State<LoginPage> {
 
     // Llamada a la API para autenticación
     final response = await http.post(
-      Uri.parse('https://fda3-2800-e2-9600-1b5-1c0f-f934-84b2-59c6.ngrok.io/auth/login'),
+      Uri.parse('https://e51f-2800-e2-9600-1b5-e492-e7f8-9938-5671.ngrok.io/auth/login'),
       body: {'correo': email, 'Contrasena': password},
     );
 
