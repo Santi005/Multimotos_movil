@@ -5,6 +5,7 @@ import 'package:mutlimotos_movil/components/body.dart';
 import 'package:mutlimotos_movil/login.dart';
 import 'dart:convert';
 
+import 'user_model.dart';
 
 import 'detalle_envio.dart';
 
@@ -29,7 +30,9 @@ class Sale {
 }
 
 class Envios extends StatefulWidget {
-  const Envios({Key? key}) : super(key: key);
+  final User user; 
+
+  const Envios({required this.user, Key? key}) : super(key: key);
 
   @override
   State<Envios> createState() => _EnviosState();
@@ -45,7 +48,7 @@ class _EnviosState extends State<Envios> {
   }
 
   void fetchSales() async {
-    final response = await http.get(Uri.parse('https://02ce-181-133-128-113.ngrok-free.app/sales/'));
+    final response = await http.get(Uri.parse('https://94e0-181-133-128-113.ngrok-free.app/sales/'));
     if (response.statusCode == 200) {
       final List<dynamic> jsonData = json.decode(response.body);
 
@@ -74,10 +77,13 @@ class _EnviosState extends State<Envios> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      key: _scaffoldKey, // Asigna la clave aquí
+      key: _scaffoldKey,
       appBar: buildAppBar(),
       drawer: CustomDrawer(),
-      body: Body(envios: envios),
+      body: Body(
+        envios: envios,
+        userName: widget.user.nombre, // Pasa el nombre del usuario a Body
+      ),
     );
   }
 
@@ -91,6 +97,7 @@ class _EnviosState extends State<Envios> {
           _scaffoldKey.currentState?.openDrawer();
         },
       ),
+      
     );
   }
 }
@@ -105,14 +112,14 @@ class CustomDrawer extends StatelessWidget {
           ListTile(
             title: Text('Mis Pedidos'),
             onTap: () {
-              // Agrega la lógica para abrir la pantalla de tus pedidos aquí
+              
             },
           ),
 
           ListTile(
             title: Text('Cerrar Sesión'),
             onTap: () {
-              // Muestra un cuadro de diálogo de confirmación
+              // Muestra un modal de confirmación
               showDialog(
                 context: context,
                 builder: (BuildContext context) {

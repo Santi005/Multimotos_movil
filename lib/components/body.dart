@@ -5,14 +5,26 @@ import 'header_with_searchbox.dart';
 
 class Body extends StatefulWidget {
   final List<Sale> envios;
+  final String userName; // Agrega userName aquí
 
-  const Body({required this.envios, Key? key}) : super(key: key);
+  const Body({
+    required this.envios,
+    required this.userName, // Añade userName al constructor
+    Key? key,
+  }) : super(key: key);
 
   @override
-  State<Body> createState() => _BodyState();
+  State<Body> createState() => _BodyState(
+    userName: userName,
+  );
 }
 
 class _BodyState extends State<Body> {
+  final String userName;
+
+  _BodyState({
+    required this.userName,
+  }); // Agrega este constructor
   // List<Sale> enviosFiltered = []; // Lista para almacenar los resultados filtrados
   late TextEditingController _searchController;
 
@@ -66,6 +78,7 @@ class _BodyState extends State<Body> {
           HeaderWithSearchBox(
             size: size,
             onSearchTextChanged: _onSearchTextChanged,
+            userName: userName,
           ),
           ListView.builder(
             physics: const NeverScrollableScrollPhysics(),

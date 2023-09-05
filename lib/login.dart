@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:mutlimotos_movil/olvidemicontrasena.dart'; 
 
+import 'dart:convert'; // Importa la biblioteca para trabajar con JSON
+
+
+import 'user_model.dart';
+
 import 'package:mutlimotos_movil/envios.dart';
 import 'package:http/http.dart' as http;
 
@@ -32,31 +37,56 @@ class _LoginPageState extends State<LoginPage> {
 
   String _message = '';
 
-  Future<void> _login() async {
-    String email = _emailController.text;
-    String password = _passwordController.text;
+void _login() async {
+  String email = _emailController.text;
+  String password = _passwordController.text;
 
-    // Llamada a la API para autenticación
-    final response = await http.post(
-      Uri.parse('https://fda3-2800-e2-9600-1b5-1c0f-f934-84b2-59c6.ngrok.io/auth/login'),
-      body: {'correo': email, 'Contrasena': password},
+  // Llamada a la API para autenticación
+  final response = await http.post(
+    Uri.parse('https://94e0-181-133-128-113.ngrok-free.app/auth/login'),
+    body: {'correo': email, 'Contrasena': password},
+  );
+
+  print('Response status code: ${response.statusCode}'); 
+
+  print('Response JSON: ${response.body}');
+
+
+  if (response.statusCode == 200) {
+    final responseData = json.decode(response.body);
+
+    // Extrae el token de autenticación
+    final token = responseData['token'];
+    print('Token obtenido: $token');
+
+
+    // Extrae los datos del usuario de la respuesta JSON
+    final userData = responseData['user'];
+    print(userData);
+    final user = User(
+      id: userData['_id'],
+      documento: userData['Documento'],
+      nombre: userData['Nombre'],
+      apellidos: userData['Apellidos'],
+      correo: userData['Correo'],
     );
 
-    if (response.statusCode == 200) {
-      setState(() {
-        _message = 'Inicio de sesión exitoso';
-      });
+    setState(() {
+      _message = 'Inicio de sesión exitoso';
+    });
 
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => Envios()),
-      );
-    } else {
-      setState(() {
-        _message = 'Credenciales incorrectas. Inténtalo de nuevo.';
-      });
-    }
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => Envios(user: user)), // Pasa el objeto 'user' a la siguiente pantalla
+    );
+  } else {
+    setState(() {
+      _message = 'Credenciales incorrectas. Inténtalo de nuevo.';
+    });
   }
+}
+
+
 
   void _navigateToForgotPassword() {
     Navigator.push(
