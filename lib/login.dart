@@ -43,7 +43,7 @@ void _login() async {
 
   // Llamada a la API para autenticación
   final response = await http.post(
-    Uri.parse('https://94e0-181-133-128-113.ngrok-free.app/auth/login'),
+    Uri.parse('https://e6ab-181-133-128-113.ngrok-free.app/auth/login'),
     body: {'correo': email, 'Contrasena': password},
   );
 
@@ -69,6 +69,7 @@ void _login() async {
       nombre: userData['Nombre'],
       apellidos: userData['Apellidos'],
       correo: userData['Correo'],
+      rolNombre: userData['Rol']['nombre']
     );
 
     setState(() {
