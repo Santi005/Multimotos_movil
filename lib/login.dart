@@ -43,7 +43,7 @@ void _login() async {
 
   // Llamada a la API para autenticación
   final response = await http.post(
-    Uri.parse('https://e6ab-181-133-128-113.ngrok-free.app/auth/login'),
+    Uri.parse('https://fa2a-181-133-128-113.ngrok-free.app/auth/login'),
     body: {'correo': email, 'Contrasena': password},
   );
 
@@ -101,27 +101,31 @@ void _login() async {
     return Scaffold(
       body: Stack(
         children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Container(
-                height: MediaQuery.of(context).size.height * 0.3,
-                decoration: BoxDecoration(
-                  color: Colors.red,
-                ),
-              ),
-              Container(
-                height: MediaQuery.of(context).size.height * 0.7,
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    image: AssetImage("images/fondo.jpg"),
-                    fit: BoxFit.cover,
-                    alignment: Alignment.bottomCenter,
+          SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Container(
+                  height: MediaQuery.of(context).size.height * 0.3,
+                  decoration: BoxDecoration(
+                    color: Colors.red,
                   ),
                 ),
-              ),
-            ],
+                Container(
+                  height: MediaQuery.of(context).size.height * 0.7,
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: AssetImage("images/fondo.jpg"),
+                      fit: BoxFit.cover,
+                      alignment: Alignment.bottomCenter,
+                    ),
+                  ),
+                ),
+                // Resto de tus elementos de inicio de sesión aquí
+              ],
+            ),
           ),
+
           Center(
             child: SingleChildScrollView(
               padding: EdgeInsets.symmetric(horizontal: 24.0),
@@ -133,15 +137,23 @@ void _login() async {
                     borderRadius: BorderRadius.circular(16.0),
                   ),
                   child: Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Image.asset(
-                          'images/logoMultimotos.png',
-                          width: 150,
-                          height: 150,
-                        ),
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                'Iniciar Sesión', // Agrega el texto aquí
+                style: TextStyle(
+                  fontSize: 24.0, // Tamaño de fuente personalizable
+                  fontWeight: FontWeight.bold, // Puedes ajustar el peso de la fuente
+                ),
+              ),
+              SizedBox(height: 16.0), // Espacio entre el texto y el logo
+              Image.asset(
+                'images/logoMultimotos.png',
+                width: 150,
+                height: 150,
+              ),
                         SizedBox(height: 24.0),
                         TextFormField(
                           controller: _emailController,

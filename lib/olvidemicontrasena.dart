@@ -17,7 +17,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
     final email = _emailController.text;
 
     final response = await http.post(
-      Uri.parse('https://94e0-181-133-128-113.ngrok-free.app/request-password-recovery'),
+      Uri.parse('https://fa2a-181-133-128-113.ngrok-free.app/request-password-recovery'),
       body: {'email': email},
     );
 

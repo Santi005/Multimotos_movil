@@ -11,7 +11,7 @@ class RecoveryCodePage extends StatelessWidget {
     final recoveryCode = _recoveryCodeController.text;
 
     final response = await http.post(
-      Uri.parse('https://02ce-181-133-128-113.ngrok-free.app/verify-recovery-code'), // Cambia la URL a tu servidor
+      Uri.parse('https://fa2a-181-133-128-113.ngrok-free.app/verify-recovery-code'), // Cambia la URL a tu servidor
       body: {
         'code': recoveryCode,
         'email': email,

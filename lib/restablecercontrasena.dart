@@ -24,7 +24,7 @@ void _resetPassword(BuildContext context) async {
 
   try {
     final response = await http.post(
-      Uri.parse('https://02ce-181-133-128-113.ngrok-free.app/reset-password-code'),
+      Uri.parse('https://fa2a-181-133-128-113.ngrok-free.app/reset-password-code'),
       body: {
         'password': newPassword,
         'code' : recoveryCode,
@@ -70,7 +70,7 @@ void _resetPassword(BuildContext context) async {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              'Ingresa tu nueva contraseña $recoveryCode',
+              'Ingresa tu nueva contraseña',
               style: TextStyle(fontSize: 16.0),
             ),
             SizedBox(height: 16.0),
